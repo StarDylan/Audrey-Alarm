@@ -1,4 +1,4 @@
-#BTDevice Check
+#BtDevice Check
 
 ##Operation
 A python script designed to allow a raspberry pi to detect specific bluetooth devices of a certain UUID
