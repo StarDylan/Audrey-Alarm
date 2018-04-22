@@ -3,23 +3,20 @@
 import bluetooth
 import time
 import urllib
-import RPi.GPIO as GPIO
 import sys
-import requests
 
-pinNumber = 7
+
+
 
 devices = []
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(pinNumber,GPIO.OUT)
-GPIO.setwarnings(False)
+
 
 
 
 #
 # This file has all the UUIDs to check in the following format
-#     00:00:00:0:00,description1
-#     00:00:00:0:01,description2
+#     00:00:00:0:00,name1
+#     00:00:00:0:01,name2
 #
 with open ('btdevices.cfg', 'r') as f:
         for line in f:
@@ -31,18 +28,8 @@ with open ('btdevices.cfg', 'r') as f:
 		except IndexError:
 			name = None
 
-		try:
-                	isy_var_in = items[2].strip(' \t\n\r') 
-		except IndexError:
-			isy_var_in = None
-
-		try:
-                	isy_var_out = items[3].strip(' \t\n\r') 
-		except IndexError:
-			isy_var_out = None
-
                 now = int(time.time())
-                devices.append({ 'uuid' : uuid, 'name' : name, 'in_last_time' : now, 'out_last_time' : now, 'in_age' : 999, 'out_age' : 0, 'isy_var_in' : isy_var_in, 'isy_var_out' : isy_var_out})
+                devices.append({ 'uuid' : uuid, 'name' : name, 'in_last_time' : now, 'out_last_time' : now, 'in_age' : 999, 'out_age' : 0})
                 
 
 while True:
@@ -81,16 +68,10 @@ while True:
 
 
         if (device['name'] == 'Dylan iPhone' and device['in_age'] > 10):
-            GPIO.output(pinNumber,GPIO.HIGH)
-            requests.get('http://starhomepi:5005/office/say/phone%20detected')
-            print'GPIO HIGH'
-
-        elif (device['name'] == 'AA'):
-            GPIO.output(pinNumber,GPIO.LOW)
-            print 'GPIO LOW'
+            print'Device in Range!'
 
         else:
-            print 'GPIO SKIP'
+            print 'Device Not in Range!'
 
 
             
